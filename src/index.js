@@ -1,23 +1,31 @@
 import React from 'react';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
+import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import rootReducer from './reducers';
-import App from './containers/App';
+import App from './components/App';
+import MoviesPage from './containers/MoviesPage';
+import MoviesNew from './containers/MoviesNew';
+import MoviesAbout from './components/MoviesAbout';
+import MoviesShow from './containers/MoviesShow';
 
 const initialState = {
   movies: [
-    { id: 1, title: 'A River Runs Through It' },
-    { id: 2, title: 'Se7en' },
-    { id: 3, title: 'Inception' }
+    { id: 1, title: 'A River Runs Through It' }
   ]
 };
 
 const store = createStore(rootReducer, initialState);
 
-render(
+ReactDOM.render(
   <Provider store={store} >
-    <App />
+    <Router history={browserHistory} >
+      <Route path="/" component={App} />
+      <Route path='/movies' component={MoviesPage}>
+        <Route path="/movies/:id" component={MoviesShow} />
+      </Route>
+    </Router>
   </Provider>,
   document.getElementById('root')
 );
